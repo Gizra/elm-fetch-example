@@ -21,7 +21,7 @@ view model =
                 []
                 [ Html.text
                     """
-                    @import url('http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
+                    @import url('https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
 
                     """
                 ]
