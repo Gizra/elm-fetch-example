@@ -4,4 +4,4 @@
 
 1. One time: Set GitHub Pages to listen to the `/docs` folder on `master` branch.
 
-Execute `elm make ./src/elm/Main.elm --output=./docs/index.html`, and commit.
+Execute `elm make ./src/elm/Main.elm --output=./docs/index.html --debug`, and commit.
