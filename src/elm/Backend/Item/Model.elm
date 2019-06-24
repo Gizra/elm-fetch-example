@@ -13,7 +13,7 @@ import StorageKey exposing (StorageKey)
 
 
 type alias ItemsDict =
-    WebData (Dict (StorageKey ItemId) (EditableWebData Item))
+    WebData (Dict (StorageKey ItemId) (WebData Item))
 
 
 {-| Item is a single story item.

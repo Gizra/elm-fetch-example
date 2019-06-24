@@ -1,18 +1,20 @@
 module Backend.Item.Utils exposing
-    ( insertMultiple
+    ( insertItemIds
     , update
     )
 
 import AssocList as Dict exposing (Dict)
 import Backend.Entities exposing (ItemId)
 import Backend.Item.Model exposing (Item, ItemsDict, Msg(..))
-import Editable.WebData exposing (EditableWebData)
-import RemoteData
+import RemoteData exposing (WebData)
 import StorageKey exposing (StorageKey)
 
 
-insertMultiple : List ( ItemId, Item ) -> ItemsDict -> ItemsDict
-insertMultiple newList dict =
+{-| Insert item IDs (e.g. for top stories), where the Item itself is still `NotAsked`. That is,
+we haven't fetched the Item itself yet.
+-}
+insertItemIds : List ItemId -> ItemsDict -> ItemsDict
+insertItemIds newList dict =
     RemoteData.map
         (\innerDict ->
             let
@@ -21,9 +23,10 @@ insertMultiple newList dict =
             in
             newList
                 |> List.foldl
-                    (\( itemId, doc ) accum ->
+                    (\itemId accum ->
                         accum
-                            |> List.append [ ( StorageKey.Existing itemId, Editable.WebData.create doc ) ]
+                            -- We still don't have the Item, so we mark it as `NotAsked`.
+                            |> List.append [ ( StorageKey.Existing itemId, RemoteData.NotAsked ) ]
                     )
                     dictAsList
                 |> Dict.fromList
@@ -31,7 +34,7 @@ insertMultiple newList dict =
         dict
 
 
-update : StorageKey ItemId -> (EditableWebData Item -> EditableWebData Item) -> ItemsDict -> ItemsDict
+update : StorageKey ItemId -> (WebData Item -> WebData Item) -> ItemsDict -> ItemsDict
 update storageKey func dict =
     case RemoteData.toMaybe dict of
         Nothing ->
@@ -42,5 +45,5 @@ update storageKey func dict =
                 Nothing ->
                     dict
 
-                Just editable ->
-                    RemoteData.map (\innerDict_ -> Dict.insert storageKey (func editable) innerDict_) dict
+                Just webData ->
+                    RemoteData.map (\innerDict_ -> Dict.insert storageKey (func webData) innerDict_) dict

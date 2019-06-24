@@ -7,4 +7,7 @@ import Pages.Items.Model exposing (Model, Msg(..))
 
 view : ModelBackend -> Model -> Html Msg
 view modelBackend model =
-    div [] [ text "Items page" ]
+    div []
+        [ text "Items page"
+        , div [] [ text <| Debug.toString modelBackend.items ]
+        ]

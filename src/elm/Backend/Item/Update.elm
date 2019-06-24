@@ -1,7 +1,9 @@
 module Backend.Item.Update exposing (update)
 
+import AssocList as Dict
 import Backend.Item.Decode exposing (decodeItemIds)
 import Backend.Item.Model exposing (Msg(..))
+import Backend.Item.Utils
 import Backend.Model exposing (ModelBackend)
 import Backend.Types exposing (BackendReturn)
 import Error.Utils exposing (maybeHttpError, noError)
@@ -43,11 +45,26 @@ update msg model =
         HandleFetchTopStories webData ->
             let
                 itemsUpdated =
-                    -- @todo
-                    model.items
+                    if RemoteData.isLoading model.items then
+                        RemoteData.Success Dict.empty
+
+                    else
+                        model.items
+
+                itemsUpdatedWithItemIds =
+                    case webData of
+                        RemoteData.Success itemIds ->
+                            Backend.Item.Utils.insertItemIds itemIds itemsUpdated
+
+                        RemoteData.Failure error ->
+                            RemoteData.Failure error
+
+                        _ ->
+                            -- Satisfy the compiler.
+                            model.items
             in
             BackendReturn
-                { model | items = itemsUpdated }
+                { model | items = itemsUpdatedWithItemIds }
                 Cmd.none
                 -- Http call might have failed.
                 (maybeHttpError webData "Backend.Item.Update" "HandleFetch")
