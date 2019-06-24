@@ -1,1 +1,1 @@
-`elm reactor`
+`elm reactor` and navigate to http://localhost:8000/src/elm/Main.elm
