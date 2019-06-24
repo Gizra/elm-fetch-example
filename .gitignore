@@ -1,0 +1,13 @@
+elm-stuff
+node_modules
+serve
+dist
+.cache
+bower_components
+LocalConfig.elm
+errorShots
+elm.js
+/index.html
+src/generated
+.idea
+
