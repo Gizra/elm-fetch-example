@@ -4679,7 +4679,6 @@ var elm$core$Basics$ge = _Utils_ge;
 var elm$core$Basics$identity = function (x) {
 	return x;
 };
-var elm$core$Debug$log = _Debug_log;
 var elm$core$Basics$False = {$: 'False'};
 var elm$core$Basics$True = {$: 'True'};
 var elm$core$List$any = F2(
@@ -4883,22 +4882,22 @@ var author$project$Pages$Items$Fetch$fetch = function (modelBackend) {
 			modelBackend.items)
 		]);
 	var itemsToFetch = function () {
-		var _n1 = krisajenkins$remotedata$RemoteData$toMaybe(modelBackend.items);
-		if (_n1.$ === 'Just') {
-			var dict = _n1.a;
+		var _n0 = krisajenkins$remotedata$RemoteData$toMaybe(modelBackend.items);
+		if (_n0.$ === 'Just') {
+			var dict = _n0.a;
 			var dictAsList = author$project$AssocList$toList(dict);
 			return A2(
 				elm$core$List$any,
-				function (_n2) {
-					var webData = _n2.b;
+				function (_n1) {
+					var webData = _n1.b;
 					return krisajenkins$remotedata$RemoteData$isLoading(webData);
 				},
 				dictAsList) ? _List_Nil : A3(
 				elm$core$List$foldl,
 				F2(
-					function (_n3, accum) {
-						var itemId = _n3.a;
-						var webData = _n3.b;
+					function (_n2, accum) {
+						var itemId = _n2.a;
+						var webData = _n2.b;
 						return (elm$core$List$length(accum) >= 3) ? accum : (krisajenkins$remotedata$RemoteData$isNotAsked(webData) ? A2(
 							elm$core$List$cons,
 							elm$core$Maybe$Just(
@@ -4912,7 +4911,6 @@ var author$project$Pages$Items$Fetch$fetch = function (modelBackend) {
 			return _List_Nil;
 		}
 	}();
-	var _n0 = A2(elm$core$Debug$log, 'itemsToFetch', itemsToFetch);
 	return A2(
 		elm$core$List$filterMap,
 		elm$core$Basics$identity,

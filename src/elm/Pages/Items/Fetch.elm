@@ -54,9 +54,6 @@ fetch modelBackend =
 
                 Nothing ->
                     []
-
-        _ =
-            Debug.log "itemsToFetch" itemsToFetch
     in
     topStories
         |> List.append itemsToFetch
