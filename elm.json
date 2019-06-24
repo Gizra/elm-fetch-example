@@ -6,9 +6,6 @@
     "elm-version": "0.19.0",
     "dependencies": {
         "direct": {
-            "Gizra/elm-debouncer": "2.0.0",
-            "Gizra/elm-editable-webdata": "2.0.1",
-            "Gizra/elm-storage-key": "1.1.1",
             "NoRedInk/elm-json-decode-pipeline": "1.0.0",
             "ccapndave/elm-update-extra": "4.0.0",
             "elm/browser": "1.0.1",
@@ -21,8 +18,7 @@
             "elm-community/list-extra": "8.2.0",
             "elm-community/maybe-extra": "5.0.0",
             "krisajenkins/remotedata": "5.0.0",
-            "lukewestby/elm-http-builder": "6.0.0",
-            "stoeffel/editable": "2.0.1"
+            "lukewestby/elm-http-builder": "6.0.0"
         },
         "indirect": {
             "elm/parser": "1.1.0",

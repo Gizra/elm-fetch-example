@@ -58,7 +58,7 @@ viewItem model ( itemId, webData ) =
                     div []
                         [ text item.title
                         , text " "
-                        , a [ onClick <| SetItemToNotAsked itemId ] [ text "X" ]
+                        , button [ onClick <| SetItemToNotAsked itemId ] [ text "X" ]
                         ]
 
                 RemoteData.Failure error ->
