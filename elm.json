@@ -22,7 +22,6 @@
             "elm-community/maybe-extra": "5.0.0",
             "krisajenkins/remotedata": "5.0.0",
             "lukewestby/elm-http-builder": "6.0.0",
-            "pzp1997/assoc-list": "1.0.0",
             "stoeffel/editable": "2.0.1"
         },
         "indirect": {

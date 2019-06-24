@@ -1,5 +1,5 @@
 module Backend.Item.Utils exposing
-    ( insertItemIds
+    ( insertMultiple
     , update
     )
 
@@ -7,14 +7,10 @@ import AssocList as Dict exposing (Dict)
 import Backend.Entities exposing (ItemId)
 import Backend.Item.Model exposing (Item, ItemsDict, Msg(..))
 import RemoteData exposing (WebData)
-import StorageKey exposing (StorageKey)
 
 
-{-| Insert item IDs (e.g. for top stories), where the Item itself is still `NotAsked`. That is,
-we haven't fetched the Item itself yet.
--}
-insertItemIds : List ItemId -> ItemsDict -> ItemsDict
-insertItemIds newList dict =
+insertMultiple : List ( ItemId, WebData Item ) -> ItemsDict -> ItemsDict
+insertMultiple newList dict =
     RemoteData.map
         (\innerDict ->
             let
@@ -23,10 +19,9 @@ insertItemIds newList dict =
             in
             newList
                 |> List.foldl
-                    (\itemId accum ->
+                    (\( itemId, webData ) accum ->
                         accum
-                            -- We still don't have the Item, so we mark it as `NotAsked`.
-                            |> List.append [ ( StorageKey.Existing itemId, RemoteData.NotAsked ) ]
+                            |> List.append [ ( itemId, webData ) ]
                     )
                     dictAsList
                 |> Dict.fromList
@@ -34,16 +29,16 @@ insertItemIds newList dict =
         dict
 
 
-update : StorageKey ItemId -> (WebData Item -> WebData Item) -> ItemsDict -> ItemsDict
-update storageKey func dict =
+update : ItemId -> (WebData Item -> WebData Item) -> ItemsDict -> ItemsDict
+update itemId func dict =
     case RemoteData.toMaybe dict of
         Nothing ->
             dict
 
         Just innerDict ->
-            case Dict.get storageKey innerDict of
+            case Dict.get itemId innerDict of
                 Nothing ->
                     dict
 
                 Just webData ->
-                    RemoteData.map (\innerDict_ -> Dict.insert storageKey (func webData) innerDict_) dict
+                    RemoteData.map (\innerDict_ -> Dict.insert itemId (func webData) innerDict_) dict

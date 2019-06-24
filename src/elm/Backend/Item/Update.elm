@@ -1,7 +1,8 @@
 module Backend.Item.Update exposing (update)
 
 import AssocList as Dict
-import Backend.Item.Decode exposing (decodeItemIds)
+import Backend.Entities exposing (fromEntityId)
+import Backend.Item.Decode exposing (decodeItem, decodeItemIds)
 import Backend.Item.Model exposing (Msg(..))
 import Backend.Item.Utils
 import Backend.Model exposing (ModelBackend)
@@ -22,6 +23,32 @@ update msg model =
                 []
     in
     case msg of
+        ClearAllItems ->
+            BackendReturn
+                { model | items = RemoteData.NotAsked }
+                Cmd.none
+                noError
+                []
+
+        FetchItem itemId ->
+            let
+                itemsUpdated =
+                    Backend.Item.Utils.update itemId (always RemoteData.Loading) model.items
+
+                itemIdAsString =
+                    String.fromInt (fromEntityId itemId)
+
+                cmd =
+                    HttpBuilder.get ("https://hacker-news.firebaseio.com/v0/item/" ++ itemIdAsString ++ ".json")
+                        |> withExpectJson decodeItem
+                        |> HttpBuilder.send (RemoteData.fromResult >> HandleFetchItem itemId)
+            in
+            BackendReturn
+                { model | items = itemsUpdated }
+                cmd
+                noError
+                []
+
         FetchTopStories ->
             let
                 itemsUpdated =
@@ -42,6 +69,14 @@ update msg model =
                 noError
                 []
 
+        HandleFetchItem itemId webData ->
+            BackendReturn
+                { model | items = Backend.Item.Utils.update itemId (always webData) model.items }
+                Cmd.none
+                -- Http call might have failed.
+                (maybeHttpError webData "Backend.Item.Update" "HandleFetchItem")
+                []
+
         HandleFetchTopStories webData ->
             let
                 itemsUpdated =
@@ -54,7 +89,12 @@ update msg model =
                 itemsUpdatedWithItemIds =
                     case webData of
                         RemoteData.Success itemIds ->
-                            Backend.Item.Utils.insertItemIds itemIds itemsUpdated
+                            let
+                                -- Mark the items as NotAsked, so they will be fetched.
+                                itemIdsNotAsked =
+                                    List.map (\itemId -> ( itemId, RemoteData.NotAsked )) itemIds
+                            in
+                            Backend.Item.Utils.insertMultiple itemIdsNotAsked itemsUpdated
 
                         RemoteData.Failure error ->
                             RemoteData.Failure error
@@ -62,10 +102,32 @@ update msg model =
                         _ ->
                             -- Satisfy the compiler.
                             model.items
+
+                trimItems =
+                    -- For demo purposes, lets trim the dict to 20.
+                    RemoteData.map
+                        (\dict ->
+                            dict
+                                |> Dict.toList
+                                |> List.take 20
+                                |> Dict.fromList
+                        )
+                        itemsUpdatedWithItemIds
             in
             BackendReturn
-                { model | items = itemsUpdatedWithItemIds }
+                { model | items = trimItems }
                 Cmd.none
                 -- Http call might have failed.
-                (maybeHttpError webData "Backend.Item.Update" "HandleFetch")
+                (maybeHttpError webData "Backend.Item.Update" "HandleFetchTopStories")
+                []
+
+        SetItemToNotAsked itemId ->
+            let
+                itemsUpdated =
+                    Backend.Item.Utils.update itemId (always RemoteData.NotAsked) model.items
+            in
+            BackendReturn
+                { model | items = itemsUpdated }
+                Cmd.none
+                noError
                 []

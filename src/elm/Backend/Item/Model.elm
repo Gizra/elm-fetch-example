@@ -2,18 +2,15 @@ module Backend.Item.Model exposing
     ( Item
     , ItemsDict
     , Msg(..)
-    , emptyItem
     )
 
 import AssocList as Dict exposing (Dict)
 import Backend.Entities exposing (ItemId)
-import Editable.WebData exposing (EditableWebData)
 import RemoteData exposing (RemoteData, WebData)
-import StorageKey exposing (StorageKey)
 
 
 type alias ItemsDict =
-    WebData (Dict (StorageKey ItemId) (WebData Item))
+    WebData (Dict ItemId (WebData Item))
 
 
 {-| Item is a single story item.
@@ -23,12 +20,10 @@ type alias Item =
     }
 
 
-emptyItem : Item
-emptyItem =
-    { title = ""
-    }
-
-
 type Msg
-    = FetchTopStories
+    = ClearAllItems
+    | FetchItem ItemId
+    | FetchTopStories
+    | HandleFetchItem ItemId (WebData Item)
     | HandleFetchTopStories (WebData (List ItemId))
+    | SetItemToNotAsked ItemId
