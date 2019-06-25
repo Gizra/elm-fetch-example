@@ -6099,14 +6099,6 @@ var author$project$Backend$Entities$fromEntityId = function (_n0) {
 var author$project$Pages$Items$Model$SetItemToNotAsked = function (a) {
 	return {$: 'SetItemToNotAsked', a: a};
 };
-var elm$html$Html$i = _VirtualDom_node('i');
-var author$project$Utils$Html$spinner = A2(
-	elm$html$Html$i,
-	_List_fromArray(
-		[
-			elm$html$Html$Attributes$class('fa fa-spinner fa-spin')
-		]),
-	_List_Nil);
 var elm$html$Html$button = _VirtualDom_node('button');
 var elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
@@ -6167,7 +6159,13 @@ var author$project$Pages$Items$View$viewItem = F2(
 								author$project$Utils$WebData$viewError(error)
 							]));
 				case 'Loading':
-					return author$project$Utils$Html$spinner;
+					return A2(
+						elm$html$Html$div,
+						_List_Nil,
+						_List_fromArray(
+							[
+								elm$html$Html$text('Loading...')
+							]));
 				default:
 					return A2(
 						elm$html$Html$div,
@@ -6247,8 +6245,7 @@ var author$project$Pages$Items$View$viewItems = F2(
 					_List_Nil,
 					_List_fromArray(
 						[
-							elm$html$Html$text('Loading top stories...'),
-							author$project$Utils$Html$spinner
+							elm$html$Html$text('Loading top stories...')
 						]));
 		}
 	});
@@ -6264,20 +6261,7 @@ var author$project$Pages$Items$View$view = F2(
 	});
 var elm$virtual_dom$VirtualDom$map = _VirtualDom_map;
 var elm$html$Html$map = elm$virtual_dom$VirtualDom$map;
-var elm$virtual_dom$VirtualDom$node = function (tag) {
-	return _VirtualDom_node(
-		_VirtualDom_noScript(tag));
-};
-var elm$html$Html$node = elm$virtual_dom$VirtualDom$node;
 var author$project$App$View$view = function (model) {
-	var styleHtml = A3(
-		elm$html$Html$node,
-		'style',
-		_List_Nil,
-		_List_fromArray(
-			[
-				elm$html$Html$text('\n                    @import url(\'https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css\');\n\n                    ')
-			]));
 	var errorElement = author$project$Error$View$view(model.errors);
 	var _n0 = model.activePage;
 	return A2(
@@ -6285,7 +6269,6 @@ var author$project$App$View$view = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				styleHtml,
 				errorElement,
 				A2(
 				elm$html$Html$map,
@@ -9085,6 +9068,11 @@ var elm$browser$Debugger$History$consMsg = F3(
 				A4(elm$html$Html$Lazy$lazy3, elm$browser$Debugger$History$viewMessage, currentIndex, index, msg),
 				rest));
 	});
+var elm$virtual_dom$VirtualDom$node = function (tag) {
+	return _VirtualDom_node(
+		_VirtualDom_noScript(tag));
+};
+var elm$html$Html$node = elm$virtual_dom$VirtualDom$node;
 var elm$browser$Debugger$History$styles = A3(
 	elm$html$Html$node,
 	'style',
