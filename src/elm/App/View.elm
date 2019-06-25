@@ -14,23 +14,11 @@ view model =
     let
         errorElement =
             Error.View.view model.errors
-
-        -- For demo purposes only, as we use elm-reactor. CSS should be added using a SASS file.
-        styleHtml =
-            Html.node "style"
-                []
-                [ Html.text
-                    """
-                    @import url('https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
-
-                    """
-                ]
     in
     case model.activePage of
         Items ->
             div []
-                [ styleHtml
-                , errorElement
+                [ errorElement
                 , Html.map MsgPageItems <|
                     Pages.Items.View.view
                         model.backend

@@ -9,7 +9,6 @@ import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 import Pages.Items.Model exposing (Model, Msg(..))
 import RemoteData exposing (WebData)
-import Utils.Html exposing (spinner)
 import Utils.WebData
 
 
@@ -42,7 +41,6 @@ viewItems modelBackend model =
         _ ->
             div []
                 [ text "Loading top stories..."
-                , spinner
                 ]
 
 
@@ -65,7 +63,7 @@ viewItem model ( itemId, webData ) =
                     div [ class "error" ] [ Utils.WebData.viewError error ]
 
                 RemoteData.Loading ->
-                    spinner
+                    div [] [ text "Loading..." ]
 
                 RemoteData.NotAsked ->
                     div [] [ text "Not asked yet..." ]
