@@ -2,11 +2,9 @@ module App.View exposing (view)
 
 import App.Model exposing (Model, Msg(..))
 import App.Types exposing (Page(..))
-import Browser
 import Error.View
 import Html exposing (..)
 import Pages.Items.View
-import Utils.Html exposing (emptyNode)
 
 
 view : Model -> Html Msg
