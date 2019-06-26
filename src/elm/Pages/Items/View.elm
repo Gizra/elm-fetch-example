@@ -18,6 +18,7 @@ view modelBackend model =
         [ style "margin" "auto"
         , style "width" "50%"
         , style "padding" "10px"
+        , style "border" "1px solid gray"
         ]
         [ viewItems modelBackend model
         ]
