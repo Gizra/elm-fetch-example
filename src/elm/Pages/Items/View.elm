@@ -5,7 +5,7 @@ import Backend.Entities exposing (ItemId, fromEntityId)
 import Backend.Item.Model exposing (Item)
 import Backend.Model exposing (ModelBackend)
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick)
 import Pages.Items.Model exposing (Model, Msg(..))
 import RemoteData exposing (WebData)
@@ -14,7 +14,11 @@ import Utils.WebData
 
 view : ModelBackend -> Model -> Html Msg
 view modelBackend model =
-    div []
+    div
+        [ style "margin" "auto"
+        , style "width" "50%"
+        , style "padding" "10px"
+        ]
         [ viewItems modelBackend model
         ]
 
@@ -54,9 +58,9 @@ viewItem model ( itemId, webData ) =
             case webData of
                 RemoteData.Success item ->
                     div []
-                        [ text item.title
+                        [ button [ onClick <| SetItemToNotAsked itemId ] [ text "X" ]
                         , text " "
-                        , button [ onClick <| SetItemToNotAsked itemId ] [ text "X" ]
+                        , text item.title
                         ]
 
                 RemoteData.Failure error ->
@@ -68,7 +72,7 @@ viewItem model ( itemId, webData ) =
                 RemoteData.NotAsked ->
                     div [] [ text "Not asked yet..." ]
     in
-    li []
+    li [ style "padding-bottom" "20px" ]
         [ div [] [ text <| "Item ID " ++ itemIdAsString ]
         , itemHtml
         ]
